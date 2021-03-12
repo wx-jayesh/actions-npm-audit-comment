@@ -1,5 +1,3 @@
 #!/bin/sh
-ls
-pwd
-whoami
-npm audit --json | node dist/main.js
+
+npm audit --json | node /opt/action-files/dist/main.js

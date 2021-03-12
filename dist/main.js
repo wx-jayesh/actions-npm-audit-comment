@@ -58,13 +58,12 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
             auditJson += chunk;
         });
         stdin.on('end', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var jsonAudit, message, github_token, pull_request_number;
+            var message, github_token, pull_request_number;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         console.log(auditJson);
-                        jsonAudit = JSON.parse(auditJson);
-                        message = "\n        ============== NPM Audit Report ==============\n\n        Total Dependencies Scanned: " + jsonAudit.metadata.totalDependencies + "\n        Critical: $(jq '.metadata.vulnerabilities.critical' npm-audit.json)\n        High: $(jq '.metadata.vulnerabilities.high' npm-audit.json)\n        Moderate: $(jq '.metadata.vulnerabilities.moderate' npm-audit.json)\n        Low: $(jq '.metadata.vulnerabilities.low' npm-audit.json)\n        \n        Critical -\n        $(jq '.advisories[] | select(.severity | . == \"critical\") | .module_name + \" | \" + .recommendation' npm-audit.json)\n        \n        High - \n        $(jq '.advisories[] | select(.severity | . == \"high\") | .module_name + \" | \" + .recommendation' npm-audit.json)\n        \n        Moderate -\n        $(jq '.advisories[] | select(.severity | . == \"moderate\") | .module_name + \" | \" + .recommendation' npm-audit.json)\n        \n        ";
+                        message = auditJson;
                         github_token = core_1.getInput('github_token');
                         if (github_1.context.payload.pull_request == null) {
                             core_1.setFailed('No pull request found.');

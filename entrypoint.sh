@@ -1,3 +1,3 @@
 #!/bin/sh
 
-npm audit --json | node /opt/action-files/dist/main.js
+npm audit | node /opt/action-files/dist/main.js

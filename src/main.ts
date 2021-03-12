@@ -12,27 +12,7 @@ const main = async () => {
 
     stdin.on('end', async (): Promise<void> => {
         console.log(auditJson);
-        const jsonAudit = JSON.parse(auditJson);
-
-        const message = `
-        ============== NPM Audit Report ==============
-
-        Total Dependencies Scanned: ${jsonAudit.metadata.totalDependencies}
-        Critical: $(jq '.metadata.vulnerabilities.critical' npm-audit.json)
-        High: $(jq '.metadata.vulnerabilities.high' npm-audit.json)
-        Moderate: $(jq '.metadata.vulnerabilities.moderate' npm-audit.json)
-        Low: $(jq '.metadata.vulnerabilities.low' npm-audit.json)
-        
-        Critical -
-        $(jq '.advisories[] | select(.severity | . == "critical") | .module_name + " | " + .recommendation' npm-audit.json)
-        
-        High - 
-        $(jq '.advisories[] | select(.severity | . == "high") | .module_name + " | " + .recommendation' npm-audit.json)
-        
-        Moderate -
-        $(jq '.advisories[] | select(.severity | . == "moderate") | .module_name + " | " + .recommendation' npm-audit.json)
-        
-        `;
+        const message = auditJson;
         const github_token = getInput('github_token');
 
         if (context.payload.pull_request == null) {
@@ -40,7 +20,7 @@ const main = async () => {
             return;
         }
         const pull_request_number = context.payload.pull_request.number;
-        
+
         await createCommentOnPr(context.repo, pull_request_number, message, github_token);
     });
 }

@@ -2,7 +2,7 @@ FROM node:14-alpine
 
 COPY dist /opt/action-files/dist
 
-COPY package* /opt/action-files
+COPY package* /opt/action-files/
 
 RUN cd /opt/action-files && \
     npm i

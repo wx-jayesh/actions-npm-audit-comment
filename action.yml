@@ -8,41 +8,45 @@ inputs:
 outputs:
   audit-result:
     description: "NPM Audit result"
-    value: ${{ steps.npm-audit.outputs.npm-audit-output }}
-  
+    # value: ${{ steps.npm-audit.outputs.npm-audit-output }}
+
 runs:
-  using: "composite"
-  steps:
-    - shell: bash
-      id: npm-audit
-      run: |
-        # storing the output directly from npm audit produces messy formatting,
-        # so redirect stderr + stdout to json file and use jq to produce desired
-        # reporting format, this gives the added bonus of flexibility
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.package-json-path }}
+  # using: "composite"
+  # steps:
+    # - shell: bash
+    #   id: npm-audit
+    #   run: |
+    #     # storing the output directly from npm audit produces messy formatting,
+    #     # so redirect stderr + stdout to json file and use jq to produce desired
+    #     # reporting format, this gives the added bonus of flexibility
 
-        npm audit --json &> npm-audit.json || true
-        cat npm-audit.json
+    #     npm audit --json &> npm-audit.json || true
+    #     cat npm-audit.json
 
-        # '%0A' is new line in bash
-        NPM_AUDIT_REPORT=$(cat <<EOF
-        %0A
-        ============== NPM Audit Report ==============%0A
-        %0A
-        Total Dependencies Scanned: $(jq '.metadata.totalDependencies' npm-audit.json)%0A
-        Critical: $(jq '.metadata.vulnerabilities.critical' npm-audit.json)%0A
-        High: $(jq '.metadata.vulnerabilities.high' npm-audit.json)%0A
-        Moderate: $(jq '.metadata.vulnerabilities.moderate' npm-audit.json)%0A
-        Low: $(jq '.metadata.vulnerabilities.low' npm-audit.json)%0A
-        %0A
-        Critical -%0A
-        $(jq '.advisories[] | select(.severity | . == "critical") | .module_name + " | " + .recommendation' npm-audit.json)%0A
-        %0A
-        High - %0A
-        $(jq '.advisories[] | select(.severity | . == "high") | .module_name + " | " + .recommendation' npm-audit.json)%0A
-        %0A
-        Moderate -%0A
-        $(jq '.advisories[] | select(.severity | . == "moderate") | .module_name + " | " + .recommendation' npm-audit.json)%0A
-        %0A
-        EOF
-        )
-        echo ::set-output name=npm-audit-output::`echo "$NPM_AUDIT_REPORT"`
+    #     # '%0A' is new line in bash
+    #     NPM_AUDIT_REPORT=$(cat <<EOF
+        # %0A
+        # ============== NPM Audit Report ==============%0A
+        # %0A
+        # Total Dependencies Scanned: $(jq '.metadata.totalDependencies' npm-audit.json)%0A
+        # Critical: $(jq '.metadata.vulnerabilities.critical' npm-audit.json)%0A
+        # High: $(jq '.metadata.vulnerabilities.high' npm-audit.json)%0A
+        # Moderate: $(jq '.metadata.vulnerabilities.moderate' npm-audit.json)%0A
+        # Low: $(jq '.metadata.vulnerabilities.low' npm-audit.json)%0A
+        # %0A
+        # Critical -%0A
+        # $(jq '.advisories[] | select(.severity | . == "critical") | .module_name + " | " + .recommendation' npm-audit.json)%0A
+        # %0A
+        # High - %0A
+        # $(jq '.advisories[] | select(.severity | . == "high") | .module_name + " | " + .recommendation' npm-audit.json)%0A
+        # %0A
+        # Moderate -%0A
+        # $(jq '.advisories[] | select(.severity | . == "moderate") | .module_name + " | " + .recommendation' npm-audit.json)%0A
+        # %0A
+        # EOF
+    #     )
+    #     echo ::set-output name=npm-audit-output::`echo "$NPM_AUDIT_REPORT"`

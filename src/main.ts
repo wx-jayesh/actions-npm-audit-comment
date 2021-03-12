@@ -1,5 +1,5 @@
 import { getInput, setFailed } from '@actions/core';
-import github, { getOctokit } from '@actions/github';
+import { context, getOctokit } from '@actions/github';
 
 const main = async () => {
     const stdin = process.openStdin();
@@ -35,7 +35,6 @@ const main = async () => {
         `;
         const github_token = getInput('GITHUB_TOKEN');
 
-        const context = github.context;
         if (context.payload.pull_request == null) {
             setFailed('No pull request found.');
             return;

@@ -10,25 +10,6 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -67,7 +48,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@actions/core");
-var github_1 = __importStar(require("@actions/github"));
+var github_1 = require("@actions/github");
 var main = function () { return __awaiter(void 0, void 0, void 0, function () {
     var stdin, auditJson;
     return __generator(this, function (_a) {
@@ -77,7 +58,7 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
             auditJson += chunk;
         });
         stdin.on('end', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var jsonAudit, message, github_token, context, pull_request_number;
+            var jsonAudit, message, github_token, pull_request_number;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -85,13 +66,12 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                         jsonAudit = JSON.parse(auditJson);
                         message = "\n        ============== NPM Audit Report ==============\n\n        Total Dependencies Scanned: " + jsonAudit.metadata.totalDependencies + "\n        Critical: $(jq '.metadata.vulnerabilities.critical' npm-audit.json)\n        High: $(jq '.metadata.vulnerabilities.high' npm-audit.json)\n        Moderate: $(jq '.metadata.vulnerabilities.moderate' npm-audit.json)\n        Low: $(jq '.metadata.vulnerabilities.low' npm-audit.json)\n        \n        Critical -\n        $(jq '.advisories[] | select(.severity | . == \"critical\") | .module_name + \" | \" + .recommendation' npm-audit.json)\n        \n        High - \n        $(jq '.advisories[] | select(.severity | . == \"high\") | .module_name + \" | \" + .recommendation' npm-audit.json)\n        \n        Moderate -\n        $(jq '.advisories[] | select(.severity | . == \"moderate\") | .module_name + \" | \" + .recommendation' npm-audit.json)\n        \n        ";
                         github_token = core_1.getInput('GITHUB_TOKEN');
-                        context = github_1.default.context;
-                        if (context.payload.pull_request == null) {
+                        if (github_1.context.payload.pull_request == null) {
                             core_1.setFailed('No pull request found.');
                             return [2 /*return*/];
                         }
-                        pull_request_number = context.payload.pull_request.number;
-                        return [4 /*yield*/, createCommentOnPr(context.repo, pull_request_number, message, github_token)];
+                        pull_request_number = github_1.context.payload.pull_request.number;
+                        return [4 /*yield*/, createCommentOnPr(github_1.context.repo, pull_request_number, message, github_token)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];

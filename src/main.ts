@@ -1,4 +1,4 @@
-import core from '@actions/core';
+import { getInput, setFailed } from '@actions/core';
 import github, { getOctokit } from '@actions/github';
 
 const main = async () => {
@@ -33,11 +33,11 @@ const main = async () => {
         $(jq '.advisories[] | select(.severity | . == "moderate") | .module_name + " | " + .recommendation' npm-audit.json)
         
         `;
-        const github_token = core.getInput('GITHUB_TOKEN');
+        const github_token = getInput('GITHUB_TOKEN');
 
         const context = github.context;
         if (context.payload.pull_request == null) {
-            core.setFailed('No pull request found.');
+            setFailed('No pull request found.');
             return;
         }
         const pull_request_number = context.payload.pull_request.number;
@@ -57,7 +57,7 @@ const createCommentOnPr = async (repoContext: { owner: string, repo: string }, p
         });
 
     } catch (error) {
-        core.setFailed(error.message);
+        setFailed(error.message);
     }
 }
 

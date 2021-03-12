@@ -33,7 +33,7 @@ const main = async () => {
         $(jq '.advisories[] | select(.severity | . == "moderate") | .module_name + " | " + .recommendation' npm-audit.json)
         
         `;
-        const github_token = getInput('GITHUB_TOKEN');
+        const github_token = getInput('github_token');
 
         if (context.payload.pull_request == null) {
             setFailed('No pull request found.');

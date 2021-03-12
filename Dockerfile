@@ -1,9 +1,11 @@
 FROM node:14-alpine
 
 COPY dist /opt/action-files/dist
-COPY node_modules /opt/action-files/dist/node_modules
 
 COPY package* /opt/action-files
+
+RUN cd /opt/action-files && \
+    npm i
 
 COPY entrypoint.sh /opt/action-files/entrypoint.sh
 

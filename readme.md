@@ -4,9 +4,9 @@ This action audits the `package.json` of a project and makes a comment on the as
 
 ## Inputs
 
-### `package-json-path`
+### `package_json_path`
 
-**Required** Folder within which the package.json lives (relative to project root). Default `"/"`.
+**Required** Folder within which the package.json lives (relative to project root). Default `"./"`.
 
 ### `github_token`
 

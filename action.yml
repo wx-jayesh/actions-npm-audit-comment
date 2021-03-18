@@ -1,5 +1,5 @@
 name: 'NPM Audit Report'
-description: 'Run NPM audit and comment'
+description: 'Audit the `package.json` of a project and make a comment on the associated PR to highlight any dependency issues'
 inputs:
   package_json_path:
     description: 'Folder within which the package.json lives (relative to project root)'

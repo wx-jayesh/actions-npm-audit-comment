@@ -1,11 +1,12 @@
 {
   "name": "actions-npm-audit-comment",
   "version": "1.0.0",
-  "description": "",
+  "description": "This action audits the `package.json` of a project and makes a comment on the associated PR to highlight any nasty dependency issues that may have arisen recently",
   "main": "dist/main.js",
   "scripts": {
     "start": "node dist/main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --build tsconfig.json"
   },
   "repository": {
     "type": "git",
